@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="../static/css/styles.css">
+
+<script>
+  var xmlhttp;
+  function retrieveDataFromServer(url, cfunc)
+  {
+     if (window.XMLHttpRequest)
+     {// code for IE7+, Firefox, Chrome, Opera, Safari
+        xmlhttp=new XMLHttpRequest();
+     }
+    else
+     {// code for IE6, IE5
+        xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+     }
+     xmlhttp.onreadystatechange=cfunc;
+     xmlhttp.open("GET", url, true);
+     xmlhttp.send();
+   }
+
+  function displayLibraries()
+  {
+    retrieveDataFromServer("/libraries", function()
+    {
+      if (xmlhttp.readyState==4 && xmlhttp.status==200)
+      {
+        createTable(xmlhttp.responseText);
+      }
+    });
+  }
+
+  function createTable(jsonData)
+  {
+    console.log(jsonData)
+
+    librariesData = JSON.parse(jsonData)
+
+    var x = document.createElement("TABLE");
+    x.className = "table table-dark table-bordered"
+    x.setAttribute("id", "libraries_table");
+    divElement = document.getElementById("librariesDiv");
+    divElement.appendChild(x);
+    createHeaderRow();
+    fontWeight = "normal";
+    var tbody = document.createElement("tbody");
+    document.getElementById("libraries_table").appendChild(tbody);
+
+    for(i=0; i<librariesData.length; i++) {
+      createRow(i);
+      createColumn(i, librariesData[i], fontWeight);
+    }
+  }
+
+  function createHeaderRow() {
+    var thead = document.createElement("thead")
+    document.getElementById("libraries_table").appendChild(thead);
+    thead.className = "thead-dark"
+
+    headerRow = {}
+    headerRow["Name"] = "Name"
+    headerRow["Phone"] = "Phone Number"
+    headerRow["Address"] = "Human Address"
+    headerRow["District"] = "District"
+    headerRow["Computers"] = "Computers"
+    headerRow["Wifi"] = "Wifi"
+
+    createRow("thead")
+    fontWeight = "bold"
+    createColumn("thead", headerRow, fontWeight)
+  }
+
+  function createRow(rowId) {
+    var y = document.createElement("TR");
+    y.setAttribute("id", rowId);
+    document.getElementById("libraries_table").appendChild(y);
+  }
+
+  function createColumn(rowId, data, fontWeight) {
+
+    var emptyCol = document.createElement("th");
+    emptyCol.scope = "row";
+    document.getElementById(rowId).appendChild(emptyCol);
+
+    var nameCol = document.createElement("TD");
+    nameCol.style.fontWeight = fontWeight;
+    nameCol.class = "col px-md-5";
+    var nameData = document.createTextNode(data.Name);
+    nameCol.appendChild(nameData);
+    document.getElementById(rowId).appendChild(nameCol);
+
+    var phoneCol = document.createElement("TD");
+    phoneCol.style.fontWeight = fontWeight;
+    phoneCol.class = "col px-md-5";
+    var phoneData = document.createTextNode(data.Phone);
+    phoneCol.appendChild(phoneData);
+    document.getElementById(rowId).appendChild(phoneCol);
+
+    var addressCol = document.createElement("TD");
+    addressCol.style.fontWeight = fontWeight;
+    addressCol.class = "col px-md-5";
+    var addressData = document.createTextNode(data.Address);
+    addressCol.appendChild(addressData);
+    document.getElementById(rowId).appendChild(addressCol);
+
+    var districtCol = document.createElement("TD");
+    districtCol.style.fontWeight = fontWeight;
+    districtCol.class = "col px-md-5";
+    var districtData = document.createTextNode(data.District);
+    districtCol.appendChild(districtData);
+    document.getElementById(rowId).appendChild(districtCol);
+
+    var computersCol = document.createElement("TD");
+    computersCol.style.fontWeight = fontWeight;
+    computersCol.class = "col px-md-5";
+    var computersData = document.createTextNode(data.Computers);
+    computersCol.appendChild(computersData);
+    document.getElementById(rowId).appendChild(computersCol);
+
+    var wifiCol = document.createElement("TD");
+    wifiCol.style.fontWeight = fontWeight;
+    wifiCol.class = "col px-md-5";
+    var wifiData = document.createTextNode(data.Wifi);
+    wifiCol.appendChild(wifiData);
+    document.getElementById(rowId).appendChild(wifiCol);
+
+  }
+</script>
+
+</head>
+
+<body onload="displayLibraries()">
+  <h1> Austin Libraries </h1>
+  <div class="jumbotron" >
+    <div class="card">
+      <div class="card-body" id="librariesDiv">
+      </div>
+    </div>
+  </div>
+</body>
+<body>
